@@ -981,7 +981,7 @@ export const Route = createFileRoute("/clube-do-livro")({
   beforeLoad: requireAuth,
   head: () => ({
     meta: [
-      { title: "Clube do Livro — Nosso Universo" },
+      { title: "Clube do Livro — Nossa História" },
       { name: "description", content: "Nosso clube do livro: leituras, anotações e estrelas." },
     ],
   }),

@@ -45,7 +45,7 @@ export const sendMoodNotification = createServerFn({ method: "POST" })
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
       body: JSON.stringify({
-        from: "Nosso Universo <onboarding@resend.dev>",
+        from: "Nossa História <onboarding@resend.dev>",
         to: [to],
         subject,
         html,

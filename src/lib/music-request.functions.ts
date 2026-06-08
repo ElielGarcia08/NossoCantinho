@@ -36,7 +36,7 @@ export const sendMusicRequest = createServerFn({ method: "POST" })
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        from: "Nosso Universo <onboarding@resend.dev>",
+        from: "Nossa História <onboarding@resend.dev>",
         to: [to],
         subject: `🎵 Nova música: ${data.song} — ${data.artist}`,
         html,

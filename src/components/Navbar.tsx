@@ -7,7 +7,7 @@ import { logoutFn } from "@/lib/auth.functions";
 const links = [
   { to: "/", label: "Home" },
   { to: "/momentos", label: "Nossos Momentos" },
-  { to: "/quiz", label: "Desafios" },
+  { to: "/desafios", label: "Desafios" },
   { to: "/cartas", label: "Cartas" },
   { to: "/dates", label: "Ideias de Date" },
   { to: "/filmes", label: "Filmes & Séries" },
@@ -34,7 +34,7 @@ export function Navbar() {
         <nav className="glass rounded-full px-4 sm:px-6 py-3 flex items-center justify-between shadow-[0_10px_40px_-15px_oklch(0.10_0.05_18/0.8)]">
           <Link to="/" className="flex items-center gap-2 font-display text-lg tracking-wide">
             <Heart className="h-4 w-4 fill-[color:var(--burnt)] text-[color:var(--burnt)]" />
-            <span className="text-gradient-rose">Nosso Universo</span>
+            <span className="text-gradient-rose">Nossa História</span>
           </Link>
 
           <ul className="hidden lg:flex items-center gap-1">

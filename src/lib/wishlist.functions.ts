@@ -159,7 +159,7 @@ export const sendWishlistNotification = createServerFn({ method: "POST" })
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        from: "Nosso Universo <onboarding@resend.dev>",
+        from: "Nossa História <onboarding@resend.dev>",
         to: [to],
         subject: `💝 Nova Wishlist: ${data.title}`,
         html,

@@ -583,7 +583,7 @@ export const Route = createFileRoute("/filmes")({
   beforeLoad: requireAuth,
   head: () => ({
     meta: [
-      { title: "Filmes & Séries — Nosso Universo" },
+      { title: "Filmes & Séries — Nossa História" },
       { name: "description", content: "Histórias pra dividir no sofá: filmes e séries que queremos ver juntos." },
     ],
   }),

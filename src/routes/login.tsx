@@ -12,8 +12,8 @@ export const Route = createFileRoute("/login")({
   component: LoginPage,
   head: () => ({
     meta: [
-      { title: "Entrar | Nosso Universo" },
-      { name: "description", content: "Um cantinho protegido para o nosso universo." },
+      { title: "Entrar | Nossa História" },
+      { name: "description", content: "Um cantinho protegido para a nossa história." },
     ],
   }),
 });

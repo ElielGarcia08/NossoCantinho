@@ -10,7 +10,7 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "Nosso Universo ❤ — Pra você, com amor" },
+      { title: "Nossa História ❤ — Pra você, com amor" },
       { name: "description", content: "Um lugar feito só pra nós dois. Entra comigo." },
     ],
   }),
@@ -182,7 +182,7 @@ const chapters = [
     desc: "A linha do tempo do nosso amor, frame por frame.",
   },
   {
-    to: "/quiz" as const,
+    to: "/desafios" as const,
     icon: "💌",
     title: "Quiz de Perguntas",
     desc: "Será que você me conhece tanto quanto eu te conheço?",

@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { supabase } from "@/integrations/supabase/client";
-import datesBg from "@/assets/dates-bg.png.asset.json";
+import datesBg from "@/assets/dates-bg-custom.png";
 import { requireAuth } from "@/lib/auth-route";
 
 type Date_ = {
@@ -92,8 +92,8 @@ function DatesPage() {
   return (
     <>
       <div aria-hidden className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[color:var(--ink)]">
-        <img src={datesBg.url} alt="" className="absolute inset-0 h-full w-full scale-125 object-cover blur-3xl opacity-80" />
-        <img src={datesBg.url} alt="" className="absolute inset-0 h-full w-full object-contain" />
+        <img src={datesBg} alt="" className="absolute inset-0 h-full w-full scale-125 object-cover blur-3xl opacity-80" />
+        <img src={datesBg} alt="" className="absolute inset-0 h-full w-full object-contain" />
       </div>
       <div aria-hidden className="fixed inset-0 z-0 pointer-events-none" style={{ background: "rgba(0,0,0,0.32)" }} />
     <PageShell

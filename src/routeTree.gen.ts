@@ -10,7 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WishlistRouteImport } from './routes/wishlist'
-import { Route as QuizRouteImport } from './routes/quiz'
+import { Route as QuizRouteImport } from './routes/desafios'
 import { Route as MomentosRouteImport } from './routes/momentos'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as HumorRouteImport } from './routes/humor'
@@ -26,8 +26,8 @@ const WishlistRoute = WishlistRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuizRoute = QuizRouteImport.update({
-  id: '/quiz',
-  path: '/quiz',
+  id: '/desafios',
+  path: '/desafios',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MomentosRoute = MomentosRouteImport.update({
@@ -80,7 +80,7 @@ export interface FileRoutesByFullPath {
   '/humor': typeof HumorRoute
   '/login': typeof LoginRoute
   '/momentos': typeof MomentosRoute
-  '/quiz': typeof QuizRoute
+  '/desafios': typeof QuizRoute
   '/wishlist': typeof WishlistRoute
 }
 export interface FileRoutesByTo {
@@ -92,7 +92,7 @@ export interface FileRoutesByTo {
   '/humor': typeof HumorRoute
   '/login': typeof LoginRoute
   '/momentos': typeof MomentosRoute
-  '/quiz': typeof QuizRoute
+  '/desafios': typeof QuizRoute
   '/wishlist': typeof WishlistRoute
 }
 export interface FileRoutesById {
@@ -105,7 +105,7 @@ export interface FileRoutesById {
   '/humor': typeof HumorRoute
   '/login': typeof LoginRoute
   '/momentos': typeof MomentosRoute
-  '/quiz': typeof QuizRoute
+  '/desafios': typeof QuizRoute
   '/wishlist': typeof WishlistRoute
 }
 export interface FileRouteTypes {
@@ -119,7 +119,7 @@ export interface FileRouteTypes {
     | '/humor'
     | '/login'
     | '/momentos'
-    | '/quiz'
+    | '/desafios'
     | '/wishlist'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -131,7 +131,7 @@ export interface FileRouteTypes {
     | '/humor'
     | '/login'
     | '/momentos'
-    | '/quiz'
+    | '/desafios'
     | '/wishlist'
   id:
     | '__root__'
@@ -143,7 +143,7 @@ export interface FileRouteTypes {
     | '/humor'
     | '/login'
     | '/momentos'
-    | '/quiz'
+    | '/desafios'
     | '/wishlist'
   fileRoutesById: FileRoutesById
 }
@@ -169,10 +169,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WishlistRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/quiz': {
-      id: '/quiz'
-      path: '/quiz'
-      fullPath: '/quiz'
+    '/desafios': {
+      id: '/desafios'
+      path: '/desafios'
+      fullPath: '/desafios'
       preLoaderRoute: typeof QuizRouteImport
       parentRoute: typeof rootRouteImport
     }

@@ -3,7 +3,7 @@ import { requireAuth } from "@/lib/auth-route";
 import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { Mail, Plus, X, Loader2, Send } from "lucide-react";
-import cartasBg from "@/assets/cartas-bg.png.asset.json";
+import cartasBg from "@/assets/cartas-bg-custom.png";
 import { supabase } from "@/integrations/supabase/client";
 
 type Person = "Eliel" | "Vitória";
@@ -404,8 +404,8 @@ function CartasPage() {
     <>
       {/* Background — full Ghibli scene with blurred extension */}
       <div aria-hidden className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[color:var(--ink)]">
-        <img src={cartasBg.url} alt="" className="absolute inset-0 h-full w-full scale-125 object-cover blur-3xl opacity-80" />
-        <img src={cartasBg.url} alt="" className="absolute inset-0 h-full w-full object-contain" />
+        <img src={cartasBg} alt="" className="absolute inset-0 h-full w-full scale-125 object-cover blur-3xl opacity-80" />
+        <img src={cartasBg} alt="" className="absolute inset-0 h-full w-full object-contain" />
       </div>
       <div aria-hidden className="fixed inset-0 z-0 pointer-events-none" style={{ background: "rgba(0,0,0,0.32)" }} />
 

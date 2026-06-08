@@ -51,10 +51,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Nosso Universo ❤ — Um presente pra você" },
+      { title: "Nossa História ❤ — Um presente pra você" },
       { name: "description", content: "Um cantinho cinematográfico só nosso. Feito com amor pro Dia dos Namorados." },
       { name: "theme-color", content: "#2a0a10" },
-      { property: "og:title", content: "Nosso Universo ❤" },
+      { property: "og:title", content: "Nossa História ❤" },
       { property: "og:description", content: "Um presente romântico e cinematográfico, só nosso." },
       { property: "og:type", content: "website" },
     ],

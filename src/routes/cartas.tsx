@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { requireAuth } from "@/lib/auth-route";
 import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
-import { Mail, Plus, X, Loader2, Send } from "lucide-react";
+import { Mail, Plus, X, Loader2, Send, Trash2 } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import cartasBg from "@/assets/cartas-bg-custom.png";
 import { sendLetterNotification } from "@/lib/letter.functions";
@@ -259,7 +259,7 @@ function ReadLetterModal({ letter, onClose }: { letter: Letter; onClose: () => v
 }
 
 /* ───────── Envelope Card ───────── */
-function EnvelopeCard({ letter, onOpen }: { letter: Letter; onOpen: () => void }) {
+function EnvelopeCard({ letter, onOpen, onDelete }: { letter: Letter; onOpen: () => void; onDelete: () => void }) {
   const colors = envelopeColor(letter.remetente);
   const unread = letter.status === "não lida";
 
@@ -267,7 +267,7 @@ function EnvelopeCard({ letter, onOpen }: { letter: Letter; onOpen: () => void }
   const preview = letter.mensagem.split(/\n+/).join(" ").slice(0, 140).trim();
 
   return (
-    <button onClick={onOpen}
+    <div
       className="envelope-card group relative w-full aspect-[5/3] text-left"
       style={{ perspective: "1200px" }}>
       <style>{`
@@ -298,7 +298,8 @@ function EnvelopeCard({ letter, onOpen }: { letter: Letter; onOpen: () => void }
       `}</style>
 
       {/* Outer container with envelope body */}
-      <div className="env-body relative w-full h-full rounded-md overflow-hidden"
+      <button onClick={onOpen}
+        className="env-body relative block w-full h-full rounded-md overflow-hidden text-left"
         style={{
           background: colors.bg,
           backgroundImage: `${colors.bg}, radial-gradient(ellipse at top, rgba(255,255,255,0.12), transparent 60%), radial-gradient(ellipse at bottom, rgba(0,0,0,0.18), transparent 60%)`,
@@ -379,8 +380,20 @@ function EnvelopeCard({ letter, onOpen }: { letter: Letter; onOpen: () => void }
             Nova
           </span>
         )}
-      </div>
-    </button>
+      </button>
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          onDelete();
+        }}
+        className="absolute top-2 left-2 z-[30] grid h-8 w-8 place-items-center rounded-full bg-black/45 text-white/75 opacity-100 shadow-lg backdrop-blur transition hover:bg-[color:var(--wine)]/85 hover:text-white sm:opacity-0 sm:group-hover:opacity-100"
+        aria-label="Excluir carta"
+        title="Excluir carta"
+      >
+        <Trash2 className="h-4 w-4" />
+      </button>
+    </div>
   );
 }
 
@@ -401,6 +414,20 @@ function CartasPage() {
   };
 
   useEffect(() => { load(); }, []);
+
+  const deleteLetter = async (letter: Letter) => {
+    const ok = window.confirm(`Excluir a carta "${letter.titulo}"?`);
+    if (!ok) return;
+
+    const { error } = await sb.delete().eq("id", letter.id);
+    if (error) {
+      alert("Erro ao excluir: " + error.message);
+      return;
+    }
+
+    setLetters((prev) => prev.filter((item) => item.id !== letter.id));
+    if (reading?.id === letter.id) setReading(null);
+  };
 
   const stats = useMemo(() => {
     const calc = (p: Person) => ({
@@ -487,7 +514,7 @@ function CartasPage() {
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {filtered.map((l) => (
-                <EnvelopeCard key={l.id} letter={l} onOpen={() => setReading(l)} />
+                <EnvelopeCard key={l.id} letter={l} onOpen={() => setReading(l)} onDelete={() => deleteLetter(l)} />
               ))}
             </div>
           )}

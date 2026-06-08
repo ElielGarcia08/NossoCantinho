@@ -61,8 +61,7 @@ function LoginPage() {
             key={`login-blur-${photo}`}
             src={photo}
             alt=""
-            className="absolute inset-0 h-full w-full scale-125 object-cover blur-3xl opacity-0 animate-login-carousel"
-            style={{ animationDelay: `${index * 5}s` }}
+            className={`absolute inset-0 h-full w-full scale-125 object-cover blur-3xl opacity-0 animate-login-carousel-${index + 1}`}
           />
         ))}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(90,28,36,0.22),rgba(5,2,4,0.82)_68%)]" />
@@ -74,22 +73,42 @@ function LoginPage() {
           0%, 30% { opacity: 1; }
           36%, 100% { opacity: 0; }
         }
-        .animate-login-carousel {
-          animation: login-carousel 15s ease-in-out infinite;
+        @keyframes login-carousel-1 {
+          0%, 30% { opacity: 1; }
+          36%, 96% { opacity: 0; }
+          100% { opacity: 1; }
+        }
+        @keyframes login-carousel-2 {
+          0%, 30% { opacity: 0; }
+          36%, 63% { opacity: 1; }
+          69%, 100% { opacity: 0; }
+        }
+        @keyframes login-carousel-3 {
+          0%, 63% { opacity: 0; }
+          69%, 96% { opacity: 1; }
+          100% { opacity: 0; }
+        }
+        .animate-login-carousel-1 {
+          animation: login-carousel-1 15s ease-in-out infinite;
+        }
+        .animate-login-carousel-2 {
+          animation: login-carousel-2 15s ease-in-out infinite;
+        }
+        .animate-login-carousel-3 {
+          animation: login-carousel-3 15s ease-in-out infinite;
         }
       `}</style>
 
       <div className="relative z-10 grid w-full max-w-6xl items-center gap-8 lg:grid-cols-[minmax(320px,0.95fr)_minmax(360px,440px)]">
         <section
           className="relative mx-auto h-[min(68svh,760px)] w-full max-w-[520px] overflow-hidden rounded-[2rem] bg-cover bg-center shadow-[0_35px_120px_-35px_oklch(0.05_0.03_18/0.95)] ring-1 ring-[color:var(--rose-antique)]/30"
-          style={{ backgroundImage: `url(${loginPhoto1})` }}
+          style={{ backgroundColor: "oklch(0.07 0.03 18)" }}
         >
           {loginPhotos.map((photo, index) => (
             <div
               key={`login-panel-${photo}`}
-              className="absolute inset-0 bg-cover bg-center opacity-0 animate-login-carousel"
+              className={`absolute inset-0 bg-cover bg-center opacity-0 animate-login-carousel-${index + 1}`}
               style={{
-                animationDelay: `${index * 5}s`,
                 backgroundImage: `url(${photo})`,
               }}
             />

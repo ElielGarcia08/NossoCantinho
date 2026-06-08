@@ -873,6 +873,9 @@ function ClubeDoLivroPage() {
       eyebrow="Capítulo 05"
       title="Clube do Livro"
       subtitle="Nosso refúgio entre páginas — leituras, anotações e estrelas."
+      eyebrowClassName="text-[#7f2f3a] drop-shadow-[0_1px_5px_rgba(255,240,220,0.55)]"
+      titleClassName="text-[#8b3f49] drop-shadow-[0_2px_10px_rgba(255,238,220,0.65)]"
+      subtitleClassName="text-[#3f2922] drop-shadow-[0_1px_5px_rgba(255,245,230,0.65)]"
     >
       {!loading && <StatsCards books={books} />}
 

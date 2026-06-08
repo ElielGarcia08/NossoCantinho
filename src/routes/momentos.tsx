@@ -148,6 +148,9 @@ function MomentosPage() {
       eyebrow="Capítulo 01"
       title="Nossos Momentos"
       subtitle="A linha do tempo do nosso amor — que seja um incentivo para tirarmos mais fotos."
+      eyebrowClassName="text-[#7f2f3a] drop-shadow-[0_1px_5px_rgba(255,240,220,0.55)]"
+      titleClassName="text-[#8b3f49] drop-shadow-[0_2px_10px_rgba(255,238,220,0.65)]"
+      subtitleClassName="text-[#3f2922] drop-shadow-[0_1px_5px_rgba(255,245,230,0.65)]"
     >
       <div className="relative">
         <div

@@ -5,6 +5,7 @@ import { LogOut, Menu, X, Heart } from "lucide-react";
 import { logoutFn } from "@/lib/auth.functions";
 
 const links = [
+  { to: "/", label: "Home" },
   { to: "/momentos", label: "Nossos Momentos" },
   { to: "/quiz", label: "Desafios" },
   { to: "/cartas", label: "Cartas" },

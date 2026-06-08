@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as WishlistRouteImport } from './routes/wishlist'
 import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as MomentosRouteImport } from './routes/momentos'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as HumorRouteImport } from './routes/humor'
 import { Route as FilmesRouteImport } from './routes/filmes'
 import { Route as DatesRouteImport } from './routes/dates'
@@ -32,6 +33,11 @@ const QuizRoute = QuizRouteImport.update({
 const MomentosRoute = MomentosRouteImport.update({
   id: '/momentos',
   path: '/momentos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HumorRoute = HumorRouteImport.update({
@@ -72,6 +78,7 @@ export interface FileRoutesByFullPath {
   '/dates': typeof DatesRoute
   '/filmes': typeof FilmesRoute
   '/humor': typeof HumorRoute
+  '/login': typeof LoginRoute
   '/momentos': typeof MomentosRoute
   '/quiz': typeof QuizRoute
   '/wishlist': typeof WishlistRoute
@@ -83,6 +90,7 @@ export interface FileRoutesByTo {
   '/dates': typeof DatesRoute
   '/filmes': typeof FilmesRoute
   '/humor': typeof HumorRoute
+  '/login': typeof LoginRoute
   '/momentos': typeof MomentosRoute
   '/quiz': typeof QuizRoute
   '/wishlist': typeof WishlistRoute
@@ -95,6 +103,7 @@ export interface FileRoutesById {
   '/dates': typeof DatesRoute
   '/filmes': typeof FilmesRoute
   '/humor': typeof HumorRoute
+  '/login': typeof LoginRoute
   '/momentos': typeof MomentosRoute
   '/quiz': typeof QuizRoute
   '/wishlist': typeof WishlistRoute
@@ -108,6 +117,7 @@ export interface FileRouteTypes {
     | '/dates'
     | '/filmes'
     | '/humor'
+    | '/login'
     | '/momentos'
     | '/quiz'
     | '/wishlist'
@@ -119,6 +129,7 @@ export interface FileRouteTypes {
     | '/dates'
     | '/filmes'
     | '/humor'
+    | '/login'
     | '/momentos'
     | '/quiz'
     | '/wishlist'
@@ -130,6 +141,7 @@ export interface FileRouteTypes {
     | '/dates'
     | '/filmes'
     | '/humor'
+    | '/login'
     | '/momentos'
     | '/quiz'
     | '/wishlist'
@@ -142,6 +154,7 @@ export interface RootRouteChildren {
   DatesRoute: typeof DatesRoute
   FilmesRoute: typeof FilmesRoute
   HumorRoute: typeof HumorRoute
+  LoginRoute: typeof LoginRoute
   MomentosRoute: typeof MomentosRoute
   QuizRoute: typeof QuizRoute
   WishlistRoute: typeof WishlistRoute
@@ -175,6 +188,13 @@ declare module '@tanstack/react-router' {
       path: '/humor'
       fullPath: '/humor'
       preLoaderRoute: typeof HumorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/filmes': {
@@ -222,6 +242,7 @@ const rootRouteChildren: RootRouteChildren = {
   DatesRoute: DatesRoute,
   FilmesRoute: FilmesRoute,
   HumorRoute: HumorRoute,
+  LoginRoute: LoginRoute,
   MomentosRoute: MomentosRoute,
   QuizRoute: QuizRoute,
   WishlistRoute: WishlistRoute,

@@ -498,9 +498,9 @@ function FilmesPage() {
         eyebrow="Capítulo 04"
         title="Filmes & Séries"
         subtitle="Histórias pra dividir no sofá."
-        eyebrowClassName="text-[#7f2f3a] drop-shadow-[0_1px_5px_rgba(255,240,220,0.55)]"
-        titleClassName="text-[#8b3f49] drop-shadow-[0_2px_10px_rgba(255,238,220,0.65)]"
-        subtitleClassName="text-[#3f2922] drop-shadow-[0_1px_5px_rgba(255,245,230,0.65)]"
+        eyebrowClassName="text-[#351416] drop-shadow-[0_1px_5px_rgba(255,240,220,0.55)]"
+        titleClassName="text-[#2a1012] drop-shadow-[0_2px_10px_rgba(255,238,220,0.65)]"
+        subtitleClassName="text-[#1f1511] drop-shadow-[0_1px_5px_rgba(255,245,230,0.65)]"
       >
         {/* Stats */}
         <div className="grid grid-cols-3 gap-3 sm:gap-5 mb-8">

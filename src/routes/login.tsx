@@ -65,21 +65,8 @@ function LoginPage() {
             style={{ animationDelay: `${index * 5}s` }}
           />
         ))}
-        {loginPhotos.map((photo, index) => (
-          <div
-            key={`login-photo-${photo}`}
-            className="absolute inset-0 grid place-items-center px-4 opacity-0 animate-login-carousel"
-            style={{ animationDelay: `${index * 5}s` }}
-          >
-            <img
-              src={photo}
-              alt=""
-              className="h-[min(82svh,860px)] w-auto max-w-[min(92vw,620px)] rounded-[2rem] object-contain shadow-[0_35px_120px_-35px_oklch(0.05_0.03_18/0.95)] ring-1 ring-[color:var(--rose-antique)]/30"
-            />
-          </div>
-        ))}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(20,6,10,0.18),rgba(5,2,4,0.78)_72%)]" />
-        <div className="absolute inset-0 bg-black/35" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(90,28,36,0.22),rgba(5,2,4,0.82)_68%)]" />
+        <div className="absolute inset-0 bg-black/50" />
       </div>
 
       <style>{`
@@ -92,10 +79,25 @@ function LoginPage() {
         }
       `}</style>
 
-      <section className="relative z-10 w-full max-w-md glass rounded-3xl border border-[color:var(--rose-antique)]/25 p-6 sm:p-8 shadow-[0_30px_80px_-30px_oklch(0.10_0.05_18/0.95)]">
-        <div className="mx-auto h-12 w-12 rounded-full bg-[color:var(--burnt)]/25 ring-1 ring-[color:var(--rose-antique)]/30 grid place-items-center">
-          <Heart className="h-5 w-5 fill-[color:var(--burnt)] text-[color:var(--rose-antique)]" />
-        </div>
+      <div className="relative z-10 grid w-full max-w-6xl items-center gap-8 lg:grid-cols-[minmax(320px,0.95fr)_minmax(360px,440px)]">
+        <section className="relative mx-auto h-[min(68svh,760px)] w-full max-w-[520px] overflow-hidden rounded-[2rem] shadow-[0_35px_120px_-35px_oklch(0.05_0.03_18/0.95)] ring-1 ring-[color:var(--rose-antique)]/30">
+          {loginPhotos.map((photo, index) => (
+            <img
+              key={`login-panel-${photo}`}
+              src={photo}
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover opacity-0 animate-login-carousel"
+              style={{ animationDelay: `${index * 5}s` }}
+            />
+          ))}
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.02),rgba(0,0,0,0.28))]" />
+          <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_90px_rgba(0,0,0,0.45)]" />
+        </section>
+
+        <section className="w-full glass rounded-3xl border border-[color:var(--rose-antique)]/25 p-6 sm:p-8 shadow-[0_30px_80px_-30px_oklch(0.10_0.05_18/0.95)]">
+          <div className="mx-auto h-12 w-12 rounded-full bg-[color:var(--burnt)]/25 ring-1 ring-[color:var(--rose-antique)]/30 grid place-items-center">
+            <Heart className="h-5 w-5 fill-[color:var(--burnt)] text-[color:var(--rose-antique)]" />
+          </div>
 
         <div className="mt-6 text-center">
           <p className="text-[10px] uppercase tracking-[0.45em] text-[color:var(--rose-antique)]">Nosso cantinho</p>
@@ -147,7 +149,8 @@ function LoginPage() {
             <span>{loading ? "Entrando..." : "Entrar no nosso mundo"}</span>
           </button>
         </form>
-      </section>
+        </section>
+      </div>
     </main>
   );
 }

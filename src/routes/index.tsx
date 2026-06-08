@@ -184,8 +184,8 @@ const chapters = [
   {
     to: "/desafios" as const,
     icon: "💌",
-    title: "Quiz de Perguntas",
-    desc: "Será que você me conhece tanto quanto eu te conheço?",
+    title: "Desafios",
+    desc: "Para que seja impossível cair na rotina.",
   },
   { to: "/cartas" as const, icon: "✉️", title: "Cartas", desc: "Para te dedicar em dias da semana." },
   {

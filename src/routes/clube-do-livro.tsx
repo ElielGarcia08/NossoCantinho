@@ -6,6 +6,7 @@ import { createPortal } from "react-dom";
 import { BookOpen, ChevronLeft, ChevronRight, Heart, Pencil, Plus, Search, Trash2, X, Check, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { ensureUploaded } from "@/lib/storage-upload";
+import { requireAuth } from "@/lib/auth-route";
 
 type PersonData = { completed: boolean; rating?: number; comment?: string };
 type Book = {
@@ -977,6 +978,7 @@ function ClubeDoLivroPage() {
 }
 
 export const Route = createFileRoute("/clube-do-livro")({
+  beforeLoad: requireAuth,
   head: () => ({
     meta: [
       { title: "Clube do Livro — Nosso Universo" },

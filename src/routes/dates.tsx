@@ -7,6 +7,7 @@ import {
 import { PageShell } from "@/components/PageShell";
 import { supabase } from "@/integrations/supabase/client";
 import datesBg from "@/assets/dates-bg.png.asset.json";
+import { requireAuth } from "@/lib/auth-route";
 
 type Date_ = {
   id: string;
@@ -31,6 +32,7 @@ function fmtDate(iso: string | null) {
 }
 
 export const Route = createFileRoute("/dates")({
+  beforeLoad: requireAuth,
   component: DatesPage,
 });
 

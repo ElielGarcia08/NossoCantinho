@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { requireAuth } from "@/lib/auth-route";
 import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { Mail, Plus, X, Loader2, Send } from "lucide-react";
@@ -483,4 +484,4 @@ function CartasPage() {
   );
 }
 
-export const Route = createFileRoute("/cartas")({ component: CartasPage });
+export const Route = createFileRoute("/cartas")({ beforeLoad: requireAuth, component: CartasPage });

@@ -4,6 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { PageShell } from "@/components/PageShell";
 import { supabase } from "@/integrations/supabase/client";
 import { sendMoodNotification } from "@/lib/mood.functions";
+import { requireAuth } from "@/lib/auth-route";
 
 type Person = "vitoria" | "eliel";
 
@@ -40,6 +41,7 @@ function formatDateTime(iso: string) {
 }
 
 export const Route = createFileRoute("/humor")({
+  beforeLoad: requireAuth,
   component: HumorPage,
 });
 

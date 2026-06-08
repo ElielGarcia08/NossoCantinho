@@ -1,202 +1,111 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
-import { Play, Pause, ArrowRight } from "lucide-react";
-import { HeroCarousel } from "@/components/HeroCarousel";
-import { usePlayer } from "@/components/MusicPlayer";
+import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
+import { useState } from "react";
+import { Heart, Loader2, LockKeyhole, Mail } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { getCurrentUserFn, loginFn } from "@/lib/auth.functions";
 
 export const Route = createFileRoute("/")({
-  component: Index,
+  beforeLoad: async () => {
+    const user = await getCurrentUserFn();
+    if (user) throw redirect({ to: "/momentos" });
+  },
+  component: LoginPage,
   head: () => ({
     meta: [
-      { title: "Nosso Universo ❤ — Pra você, com amor" },
-      { name: "description", content: "Um lugar feito só pra nós dois. Entra comigo." },
+      { title: "Entrar | Nosso Universo" },
+      { name: "description", content: "Um cantinho protegido para o nosso universo." },
     ],
   }),
 });
 
-function Index() {
-  const player = usePlayer();
-  const heroRef = useRef<HTMLDivElement>(null);
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
+function LoginPage() {
+  const router = useRouter();
+  const login = useServerFn(loginFn);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      const cx = window.innerWidth / 2;
-      const cy = window.innerHeight / 2;
-      setOffset({ x: (e.clientX - cx) / 60, y: (e.clientY - cy) / 60 });
-    };
-    window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
-  }, []);
+  const submit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      const result = await login({ data: { email, password } });
+      if (!result.ok) {
+        setError(result.message);
+        return;
+      }
+
+      await router.invalidate();
+      await router.navigate({ to: "/momentos" });
+    } catch (err) {
+      console.error(err);
+      setError("Nao consegui entrar agora. Tente novamente.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <main className="relative z-10">
-      {/* HERO */}
-      <section
-        ref={heroRef}
-        className="relative min-h-[100svh] flex items-center px-4 sm:px-8 pt-28 pb-28 overflow-hidden"
-      >
-        {/* radial glow */}
-        <div
-          className="absolute -top-40 left-1/2 -translate-x-1/2 h-[80vh] w-[80vh] rounded-full pointer-events-none"
-          style={{
-            background: "radial-gradient(closest-side, oklch(0.50 0.20 25 / 0.45), transparent 70%)",
-          }}
-        />
+    <main className="relative z-10 min-h-[100svh] grid place-items-center px-4 py-10">
+      <section className="w-full max-w-md glass rounded-3xl border border-[color:var(--rose-antique)]/25 p-6 sm:p-8 shadow-[0_30px_80px_-30px_oklch(0.10_0.05_18/0.95)]">
+        <div className="mx-auto h-12 w-12 rounded-full bg-[color:var(--burnt)]/25 ring-1 ring-[color:var(--rose-antique)]/30 grid place-items-center">
+          <Heart className="h-5 w-5 fill-[color:var(--burnt)] text-[color:var(--rose-antique)]" />
+        </div>
 
-        <div className="relative mx-auto max-w-6xl w-full grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          {/* Photo */}
-          <div
-            className="relative mx-auto w-full max-w-[420px] aspect-[4/5] animate-fade-up"
-            style={{
-              transform: `translate3d(${offset.x}px, ${offset.y}px, 0)`,
-              transition: "transform 0.3s ease-out",
-            }}
+        <div className="mt-6 text-center">
+          <p className="text-[10px] uppercase tracking-[0.45em] text-[color:var(--rose-antique)]">Nosso cantinho</p>
+          <h1 className="mt-2 font-display text-4xl sm:text-5xl text-gradient-rose">Entrar</h1>
+          <p className="mt-3 text-sm leading-relaxed text-[color:var(--cream)]/65">
+            Um acesso pequeno para manter nossas lembrancas protegidas.
+          </p>
+        </div>
+
+        <form onSubmit={submit} className="mt-7 space-y-4">
+          <label className="block">
+            <span className="text-xs text-[color:var(--cream)]/70">E-mail</span>
+            <span className="mt-1.5 flex items-center gap-2 rounded-2xl bg-black/30 border border-[color:var(--rose-antique)]/20 px-3 py-3 focus-within:border-[color:var(--rose-antique)]/70">
+              <Mail className="h-4 w-4 text-[color:var(--rose-antique)]/80" />
+              <input
+                type="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                required
+                autoComplete="email"
+                className="w-full bg-transparent text-sm text-[color:var(--cream)] outline-none"
+              />
+            </span>
+          </label>
+
+          <label className="block">
+            <span className="text-xs text-[color:var(--cream)]/70">Senha</span>
+            <span className="mt-1.5 flex items-center gap-2 rounded-2xl bg-black/30 border border-[color:var(--rose-antique)]/20 px-3 py-3 focus-within:border-[color:var(--rose-antique)]/70">
+              <LockKeyhole className="h-4 w-4 text-[color:var(--rose-antique)]/80" />
+              <input
+                type="password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                required
+                autoComplete="current-password"
+                className="w-full bg-transparent text-sm text-[color:var(--cream)] outline-none"
+              />
+            </span>
+          </label>
+
+          {error && <p className="text-sm text-red-200">{error}</p>}
+
+          <button
+            type="submit"
+            disabled={loading || !email.trim() || !password}
+            className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-[color:var(--burnt)] to-[color:var(--wine)] px-5 py-3 text-sm font-medium text-[color:var(--cream)] glow-wine hover:scale-[1.02] disabled:opacity-60 disabled:hover:scale-100 transition"
           >
-            <div
-              className="absolute -inset-6 rounded-[2rem] opacity-80 blur-2xl"
-              style={{
-                background: "linear-gradient(135deg, oklch(0.55 0.22 25 / 0.6), oklch(0.30 0.14 18 / 0.5))",
-              }}
-            />
-            <div className="relative h-full w-full rounded-[2rem] overflow-hidden ring-1 ring-[color:var(--rose-antique)]/30 shadow-[var(--shadow-soft)]">
-              <HeroCarousel alt="Você, minha pessoa favorita" />
-              <div
-                className="absolute inset-0"
-                style={{
-                  background: "linear-gradient(180deg, transparent 40%, oklch(0.10 0.04 18 / 0.65) 100%)",
-                }}
-              />
-              <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between">
-                <span className="text-[10px] uppercase tracking-[0.3em] text-[color:var(--cream)]/80">
-                  Minha pessoa favorita
-                </span>
-                <span className="text-[color:var(--rose-antique)]">♥</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Text */}
-          <div className="text-center lg:text-left animate-fade-up [animation-delay:200ms]">
-            <p className="text-[10px] uppercase tracking-[0.5em] text-[color:var(--rose-antique)] mb-5">
-              Feito com amor, por alguem que será para sempre seu.
-            </p>
-            <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl leading-[1.05] text-balance">
-              <span className="text-gradient-rose">Todo lugar fica</span>
-              <br />
-              <em className="not-italic text-[color:var(--cream)]">melhor quando</em>
-              <br />
-              <span className="text-gradient-rose">tem você.</span>
-            </h1>
-            <p className="mt-6 max-w-md mx-auto lg:mx-0 text-[color:var(--cream)]/70 leading-relaxed">
-              Eu construí esse cantinho com paciência, café e muita saudade — unindo minha pessoa favorita ao meu novo
-              hobbie favorito.
-            </p>
-
-            <div className="mt-9 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
-              <Link
-                to="/momentos"
-                onClick={() => void player.unlock()}
-                className="group inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-gradient-to-br from-[color:var(--burnt)] to-[color:var(--wine)] text-[color:var(--cream)] glow-wine hover:scale-[1.03] hover:shadow-[0_0_80px_-10px_oklch(0.55_0.22_25/0.7)] transition-all duration-500"
-              >
-                <span>Entrar no nosso mundo</span>
-                <span className="text-[color:var(--cream)]">❤</span>
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-              <button
-                onClick={() => void player.togglePlay()}
-                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full glass hover:bg-[color:var(--burnt)]/20 transition"
-              >
-                {player.playing ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 ml-0.5" />}
-                <span>{player.playing ? "Pausar nossa playlist" : "Tocar nossa playlist"}</span>
-              </button>
-            </div>
-
-            <p className="mt-8 text-xs text-[color:var(--cream)]/40 italic">
-              {player.current.title} — {player.current.artist}
-            </p>
-          </div>
-        </div>
-
-        {/* Scroll cue */}
-        <div className="absolute bottom-32 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-[0.4em] text-[color:var(--cream)]/40 animate-shimmer">
-          deslize ↓
-        </div>
-      </section>
-
-      {/* CHAPTERS */}
-      <section className="relative px-4 sm:px-8 py-24 max-w-6xl mx-auto">
-        <p className="text-center text-[10px] uppercase tracking-[0.4em] text-[color:var(--rose-antique)] mb-3">
-          Capítulos do nosso livro
-        </p>
-        <h2 className="text-center font-display text-4xl sm:text-5xl text-gradient-rose mb-14 text-balance">
-          Tudo que eu queria te dizer
-        </h2>
-
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {chapters.map((c, i) => (
-            <Link
-              key={c.to}
-              to={c.to}
-              className="group relative glass rounded-3xl p-7 overflow-hidden hover:-translate-y-1 transition-all duration-500"
-              style={{ animationDelay: `${i * 80}ms` }}
-            >
-              <div
-                className="absolute -top-20 -right-20 h-48 w-48 rounded-full blur-3xl opacity-0 group-hover:opacity-70 transition duration-700"
-                style={{ background: "oklch(0.50 0.20 25 / 0.6)" }}
-              />
-              <div className="relative">
-                <span className="text-3xl">{c.icon}</span>
-                <h3 className="mt-4 font-display text-2xl text-[color:var(--cream)]">{c.title}</h3>
-                <p className="mt-2 text-sm text-[color:var(--cream)]/60 leading-relaxed">{c.desc}</p>
-                <div className="mt-5 inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-[color:var(--rose-antique)]">
-                  Abrir <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* Closing line */}
-      <section className="relative px-4 sm:px-8 py-28 text-center max-w-3xl mx-auto">
-        <p className="font-display italic text-3xl sm:text-4xl leading-snug text-balance text-[color:var(--cream)]/90">
-          "E se um dia o mundo apagar,
-          <br />a gente acende de novo — juntos."
-        </p>
-        <p className="mt-6 text-[10px] uppercase tracking-[0.5em] text-[color:var(--rose-antique)]">
-          Feliz Dia dos Namorados ❤
-        </p>
+            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <LockKeyhole className="h-4 w-4" />}
+            <span>{loading ? "Entrando..." : "Entrar no nosso mundo"}</span>
+          </button>
+        </form>
       </section>
     </main>
   );
 }
-
-const chapters = [
-  {
-    to: "/momentos" as const,
-    icon: "📸",
-    title: "Nossos Momentos",
-    desc: "A linha do tempo do nosso amor, frame por frame.",
-  },
-  {
-    to: "/quiz" as const,
-    icon: "💌",
-    title: "Quiz de Perguntas",
-    desc: "Será que você me conhece tanto quanto eu te conheço?",
-  },
-  { to: "/cartas" as const, icon: "✉️", title: "Cartas", desc: "Para te dedicar em dias da semana." },
-  {
-    to: "/dates" as const,
-    icon: "🌹",
-    title: "Ideias de Date",
-    desc: "Pra gente nunca ficar sem desculpa pra se ver.",
-  },
-  {
-    to: "/filmes" as const,
-    icon: "🎞️",
-    title: "Filmes & Livros",
-    desc: "Histórias pra dividir no sofá ou debaixo do edredom.",
-  },
-  { to: "/humor" as const, icon: "🌙", title: "Para o Humor", desc: "Um abraço quando o dia teimar em ficar nublado." },
-];

@@ -1,9 +1,10 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useRouter, useRouterState } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
-import { Menu, X, Heart } from "lucide-react";
+import { LogOut, Menu, X, Heart } from "lucide-react";
+import { logoutFn } from "@/lib/auth.functions";
 
 const links = [
-  { to: "/", label: "Home" },
   { to: "/momentos", label: "Nossos Momentos" },
   { to: "/quiz", label: "Desafios" },
   { to: "/cartas", label: "Cartas" },
@@ -17,6 +18,14 @@ const links = [
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const { location } = useRouterState();
+  const router = useRouter();
+  const logout = useServerFn(logoutFn);
+
+  const signOut = async () => {
+    await logout();
+    await router.invalidate();
+    await router.navigate({ to: "/" });
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-40">
@@ -57,6 +66,15 @@ export function Navbar() {
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
+
+          <button
+            onClick={() => void signOut()}
+            className="hidden lg:grid h-9 w-9 place-items-center rounded-full hover:bg-[color:var(--burnt)]/20 text-[color:var(--cream)]/70 hover:text-[color:var(--cream)] transition"
+            aria-label="Sair"
+            title="Sair"
+          >
+            <LogOut className="h-4 w-4" />
+          </button>
         </nav>
 
         {open && (
@@ -74,6 +92,16 @@ export function Navbar() {
                 </li>
               ))}
             </ul>
+            <button
+              onClick={() => {
+                setOpen(false);
+                void signOut();
+              }}
+              className="mt-1 flex w-full items-center gap-2 px-4 py-3 text-sm rounded-2xl hover:bg-[color:var(--burnt)]/20 transition"
+            >
+              <LogOut className="h-4 w-4" />
+              <span>Sair</span>
+            </button>
           </div>
         )}
       </div>

@@ -4,6 +4,7 @@ import { Plus, X, Trash2, ImagePlus, Calendar, Heart, Pencil, Loader2, Minus } f
 import { PageShell } from "@/components/PageShell";
 import { HeroCarousel } from "@/components/HeroCarousel";
 import momentosBg from "@/assets/momentos-bg.png";
+import { requireAuth } from "@/lib/auth-route";
 
 const ZOOM_LEVELS = [0.75, 0.9, 1, 1.25] as const;
 const ZOOM_KEY = "momentos-zoom";
@@ -51,6 +52,7 @@ const sortAsc = (a: Moment, b: Moment) =>
   new Date(a.date).getTime() - new Date(b.date).getTime();
 
 export const Route = createFileRoute("/momentos")({
+  beforeLoad: requireAuth,
   component: MomentosPage,
 });
 

@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { Plus, Search, X, Check, Film, Tv, Trash2, Loader2, Dices, RefreshCw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { requireAuth } from "@/lib/auth-route";
 
 type Status = "pendente" | "em_andamento" | "concluido";
 type Kind = "filme" | "serie";
@@ -579,6 +580,7 @@ function FilmesPage() {
 }
 
 export const Route = createFileRoute("/filmes")({
+  beforeLoad: requireAuth,
   head: () => ({
     meta: [
       { title: "Filmes & Séries — Nosso Universo" },

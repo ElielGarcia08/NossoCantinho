@@ -6,6 +6,7 @@ import { Plus, X, Loader2, Search, Check, ExternalLink, Sparkles, Gift, Trash2 }
 import { PageShell } from "@/components/PageShell";
 import { supabase } from "@/integrations/supabase/client";
 import { scrapeProductUrl, sendWishlistNotification } from "@/lib/wishlist.functions";
+import { requireAuth } from "@/lib/auth-route";
 
 type WishItem = {
   id: string;
@@ -660,5 +661,6 @@ function WishlistPage() {
 }
 
 export const Route = createFileRoute("/wishlist")({
+  beforeLoad: requireAuth,
   component: WishlistPage,
 });

@@ -3,6 +3,7 @@ import {
   Outlet,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -89,13 +90,16 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const { location } = useRouterState();
+  const isLoginPage = location.pathname === "/";
+
   return (
     <QueryClientProvider client={queryClient}>
       <MusicPlayerProvider>
         <FloatingHearts />
-        <Navbar />
+        {!isLoginPage && <Navbar />}
         <Outlet />
-        <MusicRequestButton />
+        {!isLoginPage && <MusicRequestButton />}
       </MusicPlayerProvider>
     </QueryClientProvider>
   );

@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { requireAuth } from "@/lib/auth-route";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Plus, X, Heart, Loader2, Trash2, Check, ImagePlus, Sparkles, Trophy, Clock,
@@ -7,7 +8,7 @@ import { PageShell } from "@/components/PageShell";
 import { supabase } from "@/integrations/supabase/client";
 import { ensureUploaded } from "@/lib/storage-upload";
 
-export const Route = createFileRoute("/quiz")({ component: DesafiosPage });
+export const Route = createFileRoute("/quiz")({ beforeLoad: requireAuth, component: DesafiosPage });
 
 type Challenged = "eliel" | "vitoria" | "casal";
 type Period = "diario" | "semanal" | "mensal" | "trimestral";

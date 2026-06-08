@@ -3,7 +3,9 @@ import { requireAuth } from "@/lib/auth-route";
 import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { Mail, Plus, X, Loader2, Send } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
 import cartasBg from "@/assets/cartas-bg-custom.png";
+import { sendLetterNotification } from "@/lib/letter.functions";
 import { supabase } from "@/integrations/supabase/client";
 
 type Person = "Eliel" | "Vitória";
@@ -36,6 +38,7 @@ function SendLetterModal({ onClose, onSent }: { onClose: () => void; onSent: () 
   const [data, setData] = useState(today);
   const [saving, setSaving] = useState(false);
   const [phase, setPhase] = useState<"form" | "anim" | "done">("form");
+  const sendEmail = useServerFn(sendLetterNotification);
 
   const destinatario: Person = remetente === "Eliel" ? "Vitória" : "Eliel";
   const colors = envelopeColor(remetente);
@@ -58,6 +61,19 @@ function SendLetterModal({ onClose, onSent }: { onClose: () => void; onSent: () 
       setSaving(false);
       setPhase("form");
       return;
+    }
+    try {
+      await sendEmail({
+        data: {
+          remetente,
+          destinatario,
+          titulo: titulo.trim(),
+          mensagem: mensagem.trim(),
+          data,
+        },
+      });
+    } catch (err) {
+      console.error("letter email failed", err);
     }
     // wait for animation to finish
     setTimeout(() => {

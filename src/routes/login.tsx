@@ -80,14 +80,18 @@ function LoginPage() {
       `}</style>
 
       <div className="relative z-10 grid w-full max-w-6xl items-center gap-8 lg:grid-cols-[minmax(320px,0.95fr)_minmax(360px,440px)]">
-        <section className="relative mx-auto h-[min(68svh,760px)] w-full max-w-[520px] overflow-hidden rounded-[2rem] shadow-[0_35px_120px_-35px_oklch(0.05_0.03_18/0.95)] ring-1 ring-[color:var(--rose-antique)]/30">
+        <section
+          className="relative mx-auto h-[min(68svh,760px)] w-full max-w-[520px] overflow-hidden rounded-[2rem] bg-cover bg-center shadow-[0_35px_120px_-35px_oklch(0.05_0.03_18/0.95)] ring-1 ring-[color:var(--rose-antique)]/30"
+          style={{ backgroundImage: `url(${loginPhoto1})` }}
+        >
           {loginPhotos.map((photo, index) => (
-            <img
+            <div
               key={`login-panel-${photo}`}
-              src={photo}
-              alt=""
-              className="absolute inset-0 h-full w-full object-cover opacity-0 animate-login-carousel"
-              style={{ animationDelay: `${index * 5}s` }}
+              className="absolute inset-0 bg-cover bg-center opacity-0 animate-login-carousel"
+              style={{
+                animationDelay: `${index * 5}s`,
+                backgroundImage: `url(${photo})`,
+              }}
             />
           ))}
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.02),rgba(0,0,0,0.28))]" />

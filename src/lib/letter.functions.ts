@@ -15,19 +15,28 @@ const esc = (s: string) =>
 export const sendLetterNotification = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => schema.parse(data))
   .handler(async ({ data }) => {
-    if (data.remetente !== "Vitória" || data.destinatario !== "Eliel") {
-      return { ok: true, skipped: "not_eliel_recipient" as const };
-    }
-
     const apiKey = process.env.RESEND_API_KEY;
     if (!apiKey) return { ok: false, skipped: "no_api_key" as const };
 
-    const to = process.env.ELIEL_NOTIFICATION_EMAIL || "elielximenesgarcia@hotmail.com";
+    const recipient =
+      data.destinatario === "Eliel"
+        ? {
+            to: process.env.ELIEL_NOTIFICATION_EMAIL || "elielximenesgarcia@hotmail.com",
+            label: "Eliel",
+          }
+        : {
+            to: process.env.VITORIA_NOTIFICATION_EMAIL,
+            label: "Vitória",
+          };
+
+    if (!recipient.to) return { ok: true, skipped: "no_recipient" as const };
+
     const when = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
 
     const html = `
       <div style="font-family:Arial,sans-serif;max-width:560px;margin:auto;padding:24px;background:#fff;color:#222">
-        <h2 style="margin:0 0 16px;color:#7a2e2e">💌 Nova carta da Vitória</h2>
+        <h2 style="margin:0 0 16px;color:#7a2e2e">💌 Nova carta para ${esc(recipient.label)}</h2>
+        <p style="margin:6px 0"><strong>De:</strong> ${esc(data.remetente)}</p>
         <p style="margin:6px 0"><strong>Título:</strong> ${esc(data.titulo)}</p>
         <p style="margin:6px 0"><strong>Data da carta:</strong> ${esc(data.data)}</p>
         <p style="margin:14px 0 6px"><strong>Mensagem:</strong></p>
@@ -41,10 +50,10 @@ export const sendLetterNotification = createServerFn({ method: "POST" })
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
       body: JSON.stringify({
         from: "Nossa História <onboarding@resend.dev>",
-        to: [to],
-        subject: `💌 Nova carta da Vitória: ${data.titulo}`,
+        to: [recipient.to],
+        subject: `💌 Nova carta de ${data.remetente}: ${data.titulo}`,
         html,
-        reply_to: to,
+        reply_to: recipient.to,
       }),
     });
 

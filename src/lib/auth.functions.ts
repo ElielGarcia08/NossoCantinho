@@ -9,6 +9,11 @@ type SessionData = {
   email?: string;
 };
 
+type AuthUser = {
+  email: string;
+  password: string;
+};
+
 function getSessionSecret() {
   const secret = process.env.SESSION_SECRET;
   if (secret && secret.length >= 32) return secret;
@@ -36,18 +41,28 @@ const loginSchema = z.object({
   password: z.string().min(1),
 });
 
+function getConfiguredUsers(): AuthUser[] {
+  return [
+    { email: process.env.AUTH_EMAIL, password: process.env.AUTH_PASSWORD },
+    { email: process.env.VITORIA_AUTH_EMAIL, password: process.env.VITORIA_AUTH_PASSWORD },
+    { email: process.env.AUTH_EMAIL_2, password: process.env.AUTH_PASSWORD_2 },
+  ]
+    .filter((user): user is { email: string; password: string } => Boolean(user.email && user.password))
+    .map((user) => ({ email: user.email.trim().toLowerCase(), password: user.password }));
+}
+
 export const loginFn = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => loginSchema.parse(data))
   .handler(async ({ data }) => {
-    const expectedEmail = process.env.AUTH_EMAIL?.trim().toLowerCase();
-    const expectedPassword = process.env.AUTH_PASSWORD;
+    const users = getConfiguredUsers();
 
-    if (!expectedEmail || !expectedPassword) {
+    if (users.length === 0) {
       return { ok: false as const, message: "Login nao configurado no servidor." };
     }
 
     const email = data.email.trim().toLowerCase();
-    if (email !== expectedEmail || data.password !== expectedPassword) {
+    const user = users.find((candidate) => candidate.email === email && candidate.password === data.password);
+    if (!user) {
       return { ok: false as const, message: "E-mail ou senha incorretos." };
     }
 

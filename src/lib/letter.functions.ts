@@ -15,14 +15,14 @@ const esc = (s: string) =>
 const getVitoriaNotificationEmail = () =>
   process.env.VITORIA_NOTIFICATION_EMAIL || process.env.NOTIFICATION_EMAIL_VITORIA || process.env.VITORIA_EMAIL;
 
+const getResendApiKey = (recipientLabel: string) =>
+  recipientLabel === "Vitória" ? process.env.VITORIA_RESEND_API_KEY || process.env.RESEND_API_KEY : process.env.RESEND_API_KEY;
+
 const getResendFrom = () => process.env.RESEND_FROM_EMAIL || "Nossa História <onboarding@resend.dev>";
 
 export const sendLetterNotification = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => schema.parse(data))
   .handler(async ({ data }) => {
-    const apiKey = process.env.RESEND_API_KEY;
-    if (!apiKey) return { ok: false, skipped: "no_api_key" as const };
-
     const recipient =
       data.destinatario === "Eliel"
         ? {
@@ -35,6 +35,9 @@ export const sendLetterNotification = createServerFn({ method: "POST" })
           };
 
     if (!recipient.to) return { ok: true, skipped: "no_recipient" as const };
+
+    const apiKey = getResendApiKey(recipient.label);
+    if (!apiKey) return { ok: false, skipped: "no_api_key" as const };
 
     const when = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
 

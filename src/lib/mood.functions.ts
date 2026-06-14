@@ -10,28 +10,34 @@ const schema = z.object({
 const getVitoriaNotificationEmail = () =>
   process.env.VITORIA_NOTIFICATION_EMAIL || process.env.NOTIFICATION_EMAIL_VITORIA || process.env.VITORIA_EMAIL;
 
+const getResendApiKey = (recipient: "eliel" | "vitoria") =>
+  recipient === "vitoria" ? process.env.VITORIA_RESEND_API_KEY || process.env.RESEND_API_KEY : process.env.RESEND_API_KEY;
+
 const getResendFrom = () => process.env.RESEND_FROM_EMAIL || "Nossa História <onboarding@resend.dev>";
 
 export const sendMoodNotification = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => schema.parse(data))
   .handler(async ({ data }) => {
-    const apiKey = process.env.RESEND_API_KEY;
-    if (!apiKey) return { ok: false, skipped: "no_api_key" as const };
-
     let to: string | undefined;
     let subject: string;
     let who: string;
+    let recipient: "eliel" | "vitoria";
 
     if (data.person === "vitoria") {
       to = process.env.ELIEL_NOTIFICATION_EMAIL || "elielximenesgarcia@hotmail.com";
       subject = "Humor do dia da Vitória";
       who = "Vitória";
+      recipient = "eliel";
     } else {
       to = getVitoriaNotificationEmail() || undefined;
       subject = "Humor do dia do Eliel";
       who = "Eliel";
+      recipient = "vitoria";
       if (!to) return { ok: true, skipped: "no_recipient" as const };
     }
+
+    const apiKey = getResendApiKey(recipient);
+    if (!apiKey) return { ok: false, skipped: "no_api_key" as const };
 
     const now = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
     const esc = (s: string) =>

@@ -12,6 +12,11 @@ const schema = z.object({
 const esc = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]!));
 
+const getVitoriaNotificationEmail = () =>
+  process.env.VITORIA_NOTIFICATION_EMAIL || process.env.NOTIFICATION_EMAIL_VITORIA || process.env.VITORIA_EMAIL;
+
+const getResendFrom = () => process.env.RESEND_FROM_EMAIL || "Nossa História <onboarding@resend.dev>";
+
 export const sendLetterNotification = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => schema.parse(data))
   .handler(async ({ data }) => {
@@ -25,7 +30,7 @@ export const sendLetterNotification = createServerFn({ method: "POST" })
             label: "Eliel",
           }
         : {
-            to: process.env.VITORIA_NOTIFICATION_EMAIL,
+            to: getVitoriaNotificationEmail(),
             label: "Vitória",
           };
 
@@ -49,7 +54,7 @@ export const sendLetterNotification = createServerFn({ method: "POST" })
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
       body: JSON.stringify({
-        from: "Nossa História <onboarding@resend.dev>",
+        from: getResendFrom(),
         to: [recipient.to],
         subject: `💌 Nova carta de ${data.remetente}: ${data.titulo}`,
         html,

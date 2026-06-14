@@ -7,6 +7,11 @@ const schema = z.object({
   message: z.string().max(1000).optional().default(""),
 });
 
+const getVitoriaNotificationEmail = () =>
+  process.env.VITORIA_NOTIFICATION_EMAIL || process.env.NOTIFICATION_EMAIL_VITORIA || process.env.VITORIA_EMAIL;
+
+const getResendFrom = () => process.env.RESEND_FROM_EMAIL || "Nossa História <onboarding@resend.dev>";
+
 export const sendMoodNotification = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => schema.parse(data))
   .handler(async ({ data }) => {
@@ -22,7 +27,7 @@ export const sendMoodNotification = createServerFn({ method: "POST" })
       subject = "Humor do dia da Vitória";
       who = "Vitória";
     } else {
-      to = process.env.VITORIA_NOTIFICATION_EMAIL || undefined;
+      to = getVitoriaNotificationEmail() || undefined;
       subject = "Humor do dia do Eliel";
       who = "Eliel";
       if (!to) return { ok: true, skipped: "no_recipient" as const };
@@ -45,7 +50,7 @@ export const sendMoodNotification = createServerFn({ method: "POST" })
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
       body: JSON.stringify({
-        from: "Nossa História <onboarding@resend.dev>",
+        from: getResendFrom(),
         to: [to],
         subject,
         html,

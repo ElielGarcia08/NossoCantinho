@@ -42,12 +42,16 @@ const loginSchema = z.object({
 });
 
 function getConfiguredUsers(): AuthUser[] {
-  return [
+  const users: Array<{ email?: string; password?: string }> = [
     { email: process.env.AUTH_EMAIL, password: process.env.AUTH_PASSWORD },
     { email: process.env.VITORIA_AUTH_EMAIL, password: process.env.VITORIA_AUTH_PASSWORD },
+    { email: process.env.AUTH_EMAIL_VITORIA, password: process.env.AUTH_PASSWORD_VITORIA },
+    { email: process.env.VITORIA_EMAIL, password: process.env.VITORIA_PASSWORD },
     { email: process.env.AUTH_EMAIL_2, password: process.env.AUTH_PASSWORD_2 },
-  ]
-    .filter((user): user is { email: string; password: string } => Boolean(user.email && user.password))
+  ];
+
+  return users
+    .filter((user): user is AuthUser => Boolean(user.email && user.password))
     .map((user) => ({ email: user.email.trim().toLowerCase(), password: user.password }));
 }
 
